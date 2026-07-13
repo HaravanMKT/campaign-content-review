@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nội dung quảng cáo đang chạy — Haravan</title>
+<style>
+  :root{
+    --ink:#0b1f3a;
+    --ink-soft:#4a5a72;
+    --line:#e2e7ee;
+    --paper:#f6f8fb;
+    --card:#ffffff;
+    --brand:#155eef;
+    --brand-deep:#0b3fa8;
+    --ok-bg:#eaf6ef;
+    --ok:#187a4a;
+    --radius:14px;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:var(--sans);
+    background:var(--paper);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  header{
+    background:linear-gradient(135deg,var(--brand-deep) 0%, var(--brand) 100%);
+    color:#fff;
+    padding:32px clamp(16px,4vw,48px) 28px;
+  }
+  header .eyebrow{
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:11.5px;
+    font-weight:700;
+    opacity:.8;
+    margin-bottom:8px;
+  }
+  header h1{
+    margin:0 0 6px;
+    font-size:clamp(22px,3vw,30px);
+    font-weight:750;
+    letter-spacing:-.01em;
+  }
+  header p{
+    margin:0;
+    font-size:14.5px;
+    opacity:.9;
+    max-width:640px;
+    line-height:1.5;
+  }
+  .stat-row{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  }
+  .stat-pill{
+    background:rgba(255,255,255,.14);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;
+    padding:7px 14px;
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .stat-pill b{ font-size:14px; }
+
+  main{
+    padding:22px clamp(16px,4vw,48px) 60px;
+    max-width:1360px;
+    margin:0 auto;
+  }
+
+  .toolbar{
+    position:sticky;
+    top:0;
+    z-index:20;
+    background:var(--paper);
+    padding:14px 0 14px;
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    align-items:center;
+    border-bottom:1px solid var(--line);
+    margin-bottom:20px;
+  }
+  .search-wrap{
+    flex:1 1 260px;
+    position:relative;
+  }
+  .search-wrap input{
+    width:100%;
+    padding:11px 14px 11px 38px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:14px;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .search-wrap input:focus{
+    border-color:var(--brand);
+    box-shadow:0 0 0 3px rgba(21,94,239,.15);
+  }
+  .search-wrap svg{
+    position:absolute;
+    left:12px;
+    top:50%;
+    transform:translateY(-50%);
+    opacity:.45;
+  }
+  select{
+    padding:10px 34px 10px 14px;
+    border-radius:10px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+    cursor:pointer;
+  }
+  #resultCount{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    font-weight:600;
+    margin-left:auto;
+    white-space:nowrap;
+  }
+
+  .campaign-group{ margin-bottom:34px; }
+  .campaign-heading{
+    display:flex;
+    align-items:baseline;
+    gap:10px;
+    margin:0 0 14px;
+    padding-bottom:10px;
+    border-bottom:2px solid var(--ink);
+  }
+  .campaign-heading h2{
+    font-size:16.5px;
+    margin:0;
+    letter-spacing:-.01em;
+  }
+  .campaign-heading .count{
+    font-size:12px;
+    font-weight:700;
+    color:#fff;
+    background:var(--ink-soft);
+    padding:2px 9px;
+    border-radius:999px;
+  }
+  .status-badge{
+    flex-shrink:0;
+    font-size:10.5px;
+    font-weight:800;
+    padding:3px 9px;
+    border-radius:6px;
+    white-space:nowrap;
+    letter-spacing:.03em;
+  }
+  .status-badge.on{ color:var(--ok); background:var(--ok-bg); }
+  .status-badge.off{ color:#b3261e; background:#fbe4e2; }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+    gap:14px;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    transition:box-shadow .15s, transform .15s;
+  }
+  .card:hover{
+    box-shadow:0 6px 18px rgba(11,31,58,.08);
+    transform:translateY(-1px);
+  }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:8px;
+  }
+  .ad-name{
+    font-size:14px;
+    font-weight:700;
+    line-height:1.35;
+    color:var(--ink);
+  }
+  .cta-badge{
+    flex-shrink:0;
+    font-size:10.5px;
+    font-weight:700;
+    color:var(--brand-deep);
+    background:#eaf1ff;
+    padding:3px 8px;
+    border-radius:6px;
+    white-space:nowrap;
+  }
+  .body-text{
+    font-size:12.8px;
+    color:var(--ink-soft);
+    line-height:1.55;
+    white-space:pre-wrap;
+    max-height:180px;
+    overflow:hidden;
+    position:relative;
+  }
+  .body-text.no-copy{
+    font-style:italic;
+    color:#9aa6b6;
+  }
+  .body-text.expanded{ max-height:none; }
+  .fade{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    height:32px;
+    background:linear-gradient(transparent, var(--card));
+    pointer-events:none;
+  }
+  .body-text.expanded ~ .fade{ display:none; }
+  .expand-btn{
+    align-self:flex-start;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--brand);
+    background:none;
+    border:none;
+    cursor:pointer;
+    padding:0;
+  }
+  .card-footer{
+    display:flex;
+    gap:8px;
+    margin-top:auto;
+    padding-top:8px;
+  }
+  .btn-preview{
+    flex:1;
+    text-align:center;
+    text-decoration:none;
+    font-size:12.5px;
+    font-weight:700;
+    padding:9px 10px;
+    border-radius:8px;
+    background:var(--ink);
+    color:#fff;
+    transition:background .15s;
+  }
+  .btn-preview:hover{ background:var(--brand-deep); }
+  .btn-copy{
+    flex-shrink:0;
+    font-size:12.5px;
+    font-weight:700;
+    padding:9px 12px;
+    border-radius:8px;
+    background:#fff;
+    border:1px solid var(--line);
+    color:var(--ink-soft);
+    cursor:pointer;
+  }
+  .btn-copy:hover{ border-color:var(--brand); color:var(--brand); }
+  .btn-copy.copied{ color:var(--ok); border-color:var(--ok); background:var(--ok-bg); }
+
+  .no-results{
+    text-align:center;
+    padding:60px 20px;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+
+  footer{
+    text-align:center;
+    padding:24px;
+    font-size:11.5px;
+    color:#9aa6b6;
+  }
+
+  @media (max-width:640px){
+    .toolbar{ flex-direction:column; align-items:stretch; }
+    #resultCount{ margin-left:0; text-align:right; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Haravan · Meta Ads · Nội dung quảng cáo</div>
+  <h1>Rà soát nội dung quảng cáo đang chạy</h1>
+  <p>Danh sách nội dung ads Path 1.1 &amp; Path 1.3 để team Sale nắm được thông điệp, offer đang truyền thông tới khách hàng. Lọc theo tài khoản, campaign, trạng thái, hoặc tìm theo tên/nội dung ad.</p>
+  <div class="stat-row">
+    <div class="stat-pill"><b>68</b> ads</div>
+    <div class="stat-pill"><b>9</b> campaign</div>
+    <div class="stat-pill"><b>2</b> tài khoản</div>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar">
+    <div class="search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="searchInput" type="text" placeholder="Tìm theo tên ad hoặc nội dung text...">
+    </div>
+    <select id="accountFilter">
+      <option value="all">Tất cả tài khoản</option>
+    </select>
+    <select id="campaignFilter">
+      <option value="all">Tất cả campaign</option>
+    </select>
+    <select id="statusFilter">
+      <option value="all">Tất cả trạng thái</option>
+      <option value="ON">Chỉ ON (đang chạy)</option>
+      <option value="OFF">Chỉ OFF (đã tắt)</option>
+    </select>
+    <div id="resultCount"></div>
+  </div>
+
+  <div id="results"></div>
+</main>
+
+<footer>Nội dung lấy trực tiếp từ Meta Ads · Bản dành cho team Sale — chỉ hiển thị nội dung quảng cáo, không có số liệu ngân sách/lead/chi phí.</footer>
+
+<script>
+const ADS = [
+  {
+    "campaign": "Path 1.1 Omnichannel - video agency",
+    "name": "2. Mở rộng đa kênh",
+    "cta": "SIGN_UP",
+    "body": "📈 Đơn tăng nhưng lợi nhuận không tăng?\n❌ Tin nhắn nằm ở nhiều nơi\n❌ Đơn hàng dễ bị sót\n❌ Tồn kho lệch giữa các kênh\n❌ Cuối ngày vẫn phải ngồi đối soát\n\nHaravan giúp chủ shop quản lý mọi hoạt động bán hàng trên một nền tảng:\n💬 Quản lý Facebook, TikTok, Website và sàn TMĐT tập trung\n📦 Đồng bộ đơn hàng giữa các kênh\n📊 Kiểm soát tồn kho chính xác theo thời gian thực\n👥 Lưu trữ & chăm sóc khách hàng tập trung\n💰 Theo dõi doanh thu, đơn hàng dễ dàng\n⏱️ Tiết kiệm thời gian vận hành mỗi ngày\n\n🚀 Hơn 60.000+ doanh nghiệp và chủ shop đang tin dùng Haravan.\n👉 Đăng ký tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIwNnFPrcBC8VSjwufbVGe67mKG3BooynKkJ2rzSSMWpy7N6fgguXpMy9wU3dZdYloGnQ-L_GIU2DD0Fn6TAKi7JCPn_s-j9ZXGTVaChjcMIN6OXnysAynH94nm-L6_g9TOR9HWtk7BYTWRqghxC7gv_-MIe-zWgatr4iQQkEvAEtL-Hc0XkdK4PsU_298tlJEWnrMzNgR9AZyfM5Rr5_hVnPWhLpJZPfzFWSUojXwkkA&t=AQKUYk79QQkoi8vjxQw",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "3. Thiết kế web giới thiệu tour du lịch",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLm-56KW3DlPvhX8-70hXoF1rgAEk2r6VbjtpKhVQZwrrRoiICdaZE7ifWPmDoBUvLxdJXdV2v6NWkBC_W9ngJinpcTHXlVzEkCxJgdNX94RfIiQRs3KZudoDY9NMcW6enUVECBMRQ1smdKNaiMMMaJgkD24uSz9pqVl2ugxlJd5LXurAVvDqLh00L4vb-X4d-sR9Qvixo14o22cpc2ZoI-LDGOUi5VLCKKScEa3Eiccw&t=AQK87sfyfH6nhn0V6Uk",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "5. Website giới thiệu homestay",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQI6W9TtDdWrnIUpZnxL_v5quho6sStc4cdh9vmGLvFXYH2izITT_4RQgKgKcJW5w69q5wWRo1hxA6Fdo9NMRf9pXUwSIiLGRpYFd9hcRA7YIDyWibyWri8Rjn8lgQgQsAp3ZEBTA0ZBpkMs5TVlvrem4agx2GbimVFYD7K9KGkPTNQ2A1BihKHFqSiQ_uT9bkoJ3F523VGDSKX8f1o3gFUZNPyg5rcYgNtgXkkBj95HKA&t=AQLqKbzYVI0DjhAYMaU",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "4. Tối ưu web giới thiệu tour du lịch",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLxnHdN3Sup0dIj4iGixw17EDjNunHRl1SSSqWlL-jbQOOburYNdOqfzpn6KL2p9SBbu7Sn4kp-y-JNwLwZt6Hhf4IVIpkAZWozQK02ICxRXIAKy3OlY4spQRXfFSTKZ5n9_g44nYfMocgrO2wKuLvFbFQrc8KZjU1rhGK3-8C7JZ2DDrsXcNLQrRRV89nywcdRRrJL0ga7F81cpmxAmifLeNrWynW-hivGMXhxM24_TQ&t=AQJavvlzkDI4rm7ldMo",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "6. Website giáo dục",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJRliahylCO9qgQlmPDR1bQB1b_tqzts0izMqWz1do3AvvLide70g-PtMEDxy_JGfb0QwswrIEjrpWI6oV8kG-p-jqIHObH__AxLMu8Pd4003qpFXhvEONFlJ31zbgd9-qDm4jJ1bKLkwpWWXu7tf1AFCB6S_99IlVkfj-IS_hiV24vcIAYUarSNA-wXiG9kznhB4DP1NWo2x8TRCpjzKbVP2q8SRfJb-OSvSZcGDycIg&t=AQK0iiuRq2wdhdvr1sI",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "2. Thiết kế website dự án BDS",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLcjPo3iHsCffv4bF9dhjaHA_GBYVHZ9z6vcrNm4TaziMdrwk23x6gHbjhm4mC4I_2yqkih2osYCaFBSxBSmDgyULx5YWRpVTgVwNiM2RZAHe3pOpSqWWMTnivQ8xw5LexQtgOZTVH8960WlARwVxDCwPapQVqIAsbk70hMSkQz9Tahmr2MqX6xfcfIuZXoud-swhtrQqsrEq_59dOBD_0Qq8oRvEo0kJm0ngay65tx0g&t=AQJe9cqZ7enqc942G18",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "1. Thiết kế website BDS chuẩn SEO",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJAiB8aTnSsHEyojPbIdvJCLK20Tj0rk6dhu05IkbVSrq41TJ-JyOdmCrUeJmWyrcEa9wYslLM4tQHho-avPGss8sWDMTIbcLA--ijAELuhJgPub7jQG7wxXba6k5D7d8uN3VPOfljdd0oa5txB-_VyTlbvDbeC2rYpcczxPQWRcj_lTm3-LV-hWOTM2EnPNUyRXeMii2rWzkes_9MQCxWoy7JWnkD0HhFgrEEN47WJvA&t=AQKtygiUkV2F9vaeK8E",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0607",
+    "name": "7. Website portfolio",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQISyVaSikss8vxKjE9MCE4g2yu1xINU5InBTc_tK3BGsdRwDGzFcZRG264X-KAebee5JNY2ojxfKwpHS-lBW9k0AOtaT55GnKS8m9FvO1dpe6bSBMH7gHfCY4HO8_k235bHU0GPtXM27cdZzdvmduXE0G8_g1xAKkEh0Wl7EaYFJDt8Ekc0IcdMwOK4epZsKA5axosoyc7IucL3vveJhEM_VMDU2Iy0AMzhmV_qCfkVYw&t=AQLSZeP7Sw7kbuQXPCY",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Website showroom nội thất",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJ8k1YisAq09dEyJbKb63-eFHO02fLvp_iZEqA3nYywtAEBsmfKIJDKt35JcYOsAXbbgZ7i668Zm4FA9sq5mmjmptgNfTgX_8LBDw50UUa_Liq-t_4WrdYKHycovCH6yYRwR3G0-1nsKSm1j5_pYtuGkyAm01ACD8n6r5OtYOGtVeWK9ef21Z_HwabO0Op64oJ99HvwlvxkUx8MX77LtQcmty_Zf7fvIaRSZXUHGMUyVA&t=AQJr4TbbMx04ogMBzFc",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Pricing",
+    "name": "Giải pháp social 300K",
+    "cta": "SIGN_UP",
+    "body": "🚀 Bán hàng trên Facebook, TikTok, Zalo nhưng mọi thứ vẫn đang quá rời rạc?\n\nInbox nhiều nhưng khó chăm sóc kịp. Live có đơn nhưng khó theo dõi hiệu quả. Chạy ads mà chưa tận dụng lại khách cũ.\n\nHaravan Social giúp bạn gom tất cả về 1 nền tảng duy nhất:\n✅ Quản lý chat đa kênh tập trung\n✅ Chatbot & AI Chat hỗ trợ trả lời tự động\n✅ Livestream chốt đơn nhanh, không sót khách\n✅ Đồng bộ dữ liệu lên Meta Ads & TikTok Ads để tối ưu quảng cáo\n✅ Remarketing khách cũ qua Messenger/Zalo dễ dàng\n\n🎯 Không chỉ giúp bán hàng dễ hơn — mà còn giúp tăng trưởng bền vững hơn trên Social.\n\n👉 Dùng thử miễn phí 14 ngày cùng Haravan ngay hôm nay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKOnwjv7s5k5gxpt0M8bCBu6QXYY6vm_fXvVgijTyO70DptOaDg_WJHeyyee6AZCZJd-WKMupYxDcWNn0Wl2ME6_9OkjezsF0vmcgZH7RBJrwe9xzxmlKv0X6wcD_DxNREVMRttogfd-POwCo0aQBCLT0hJXwDmnMgwAWACYHejS2zfGnV86Prdr9uEIHr0teLm09mNKcMHs1NQbJ3QztpLeUF8uNI5cWiYaz8cWdxpag&t=AQJg5CcpiMpx8NHMvnM",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Pricing",
+    "name": "Website doanh nghiệp 400K",
+    "cta": "SIGN_UP",
+    "body": "🚀 Website chuyên nghiệp không còn là “đặc quyền” của doanh nghiệp lớn\n\nBạn đang bán hàng trên Facebook, TikTok… nhưng chưa có một nơi thật sự chuyên nghiệp để khách tìm hiểu & đặt niềm tin?\nMột website đẹp, chuẩn SEO không chỉ giúp tăng uy tín — mà còn giúp bạn có thêm khách hàng mỗi ngày từ Google.\n\nVới Haravan:\n✅ Thiết kế website doanh nghiệp chuẩn chuyên nghiệp\n✅ Tốc độ tải nhanh, tối ưu trải nghiệm mua hàng\n✅ Tích hợp form lead, chatbot & đa kênh Facebook/Zalo\n✅ Hỗ trợ SEO & marketing để tăng khách hàng tự nhiên\n✅ Chỉ từ 400K/tháng — dễ bắt đầu, dễ mở rộng\n\n🎁 Dùng thử website Haravan miễn phí 14 ngày\n\n 👉 Bắt đầu xây dựng “tài sản số” cho doanh nghiệp ngay hôm nay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJYbKJdcDR_BQx0M8fyhuFIJNlAH9nM0lt9dMcYIruPOP6cazjTnyegVMeZCHdESeg6K5p_8MsHJuVOHbD5vr2PUdc2CSnbfL9jTV4yt2GGkaLQ1Q9TAD2Ej0j6Na866_NbHOuSE-tHVDsY08jqoa8wKc2zlGW6PYRe9PK_OcWLzs8z_bez9VUANS--tpjnnpUv_bD6XIS65kk2w-O7uuPFJLXm7EpMy8Q1t0cTXpj3nw&t=AQKdrwkag7XYzciLOho",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Pricing",
+    "name": "Web bán hàng chuyên nghiệp 680K",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKAXe3eQVuaIii2quLZJA91kW74LQ0R-4qeTPNszMb1t4shyX1xCASAEivYLGYcG-OPmMm6te9pGx1PFO8zZHbudzmUHN-ebmqk4YlrWvJfIB_dhOgA6WkvLLFVJxe3d4wOyniNbeRoR9fhnAfpCVOT2j5iqZW1gt_2wNDyIj5S_5Czh5I-LIZoGD2CwMb5Ofq4B_iFs3P4R59rkcKbaI1bYXA-Wm06fF4cEp4aEu4ODA&t=AQLkWheI92776ZO0Nbo",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Làm website nhưng không biết bắt đầu từ đâu",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIueaGjEP3uHvTikyKYdHdkvVbhgc0f3tzwj0kHZhWBqu9GzRmTjDjAazj6xpGfcIznw2atPKdfZLqUyrkT9gQtnt4CONJACxF2S6KRGK3FvOAtMNSDmEXL8YuzE7HdT5-ijvJQgs0Ac6a0oGkNnipHj0rGle30v4uMj2XnAsC4LDJvWHD5X3TI8Jbb7TC2fJ-wOV9VMreoUJ6ZBJOG1sS02g_CoapvwlBMz6WtGv2ufQ&t=AQKFVLk2xdIbV7tDPZQ",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "11. Làm website: phức tạp và tốn kém",
+    "cta": "SIGN_UP",
+    "body": "🚀 LÀM WEBSITE GIỜ ĐÃ DỄ HƠN BẠN NGHĨ\nTừng tốn tiền triệu làm web rồi bỏ xó vì lỗi, khó dùng? 😥 Cuối cùng lại quay về bán Facebook cho nhanh?\nBạn không sai — chỉ là chưa dùng đúng nền tảng.\n\n✨ Haravan Website giúp bạn tự tạo web bán hàng chuyên nghiệp mà không cần IT hay biết code.\n🖱️ Chọn giao diện\n📸 Up sản phẩm\n✍️ Nhập thông tin\n➡️ Go-Live trong vài ngày, hiển thị đẹp trên mọi thiết bị\n\n🛒 Có sẵn giỏ hàng, thanh toán, vận chuyển\n📦 Quản lý đơn hàng, tồn kho, khách hàng tập trung\n🔒 Sở hữu kênh bán hàng độc lập, không còn phụ thuộc nền tảng khác\n\n🎯 Với Haravan, ai cũng có thể làm website và bán hàng tăng trưởng bền vững",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKrcBdxXVQa49atjULoFFhUj2uFx1f2V14S2dUs-di2d79XQblC4pgt4LLEfqa-Rfi7nz4q9SALmhWsz4U4hA7_AO5iFpgVSLDHhZNUz607RJKnRhQ9mj8bgCmFUsh8xTE5kWZs7bpkZ1v0JVqk9rT3u0BcuWUqgscDjq28d35EJq2TsxL7RrLCKR-dI3_418oH-plcYs1Md77SIDYx3u9uWUNrd97AxOLn3blJ_e3E2g&t=AQKeEg-7V0mUzClQRzQ",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Video 1. Giải pháp website bền vững cho chủ shop - Bản sao",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLhQeDBrpj4p7pYx4nkH8YOtFhDmxggaUj9H32Nv1752QzqHMm7QkIVn8e4Vp6gOnyUteANK4xSN4owWT3fDNVrNip28D-unv0EyY9SQJlI_Sb-zF01B_5b-9y232r41zEKRnhim7_BgfuSe7trcuhak5SEv4jYpUOSY1e4Mfqd1S_j7mfZegQFDLSi0QfkeyznpYV4jTxadUAV_CrCx4x2S4WeaaiInZjkYsFwXv0v9g&t=AQIvscRfaxBEt5lsR8k",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichannel - video agency",
+    "name": "4. Đăng sản phẩm trên nhiều kênh",
+    "cta": "SIGN_UP",
+    "body": "⏰ ĐĂNG SẢN PHẨM TRÊN NHIỀU KÊNH ĐANG LÀM BẠN MẤT QUÁ NHIỀU THỜI GIAN?\nMột thay đổi nhỏ cũng phải cập nhật ở nhiều nơi khác nhau.\n\nGiải pháp đa kênh Haravan giúp bạn:\n🚀 Tạo sản phẩm một lần, đồng bộ lên Website, Facebook và các sàn TMĐT\n📦 Quản lý sản phẩm, đơn hàng và tồn kho tập trung\n🔄 Cập nhật thông tin sản phẩm đồng bộ trên mọi kênh\n📈 Mở rộng bán hàng đa kênh mà không làm tăng khối lượng vận hành\n\nTẠO MỘT LẦN. BÁN HÀNG TRÊN MỌI KÊNH.\n👉 Đăng ký dùng thử miễn phí ngay hôm nay.",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLtq8V5oA15K8rwmlJHAU8LNtluiN1e2A8OqOR9YJi2MFCVmg7mUyOhhKEYB0i8gVMr3t2xr4XrmDX5pnorbE_YyaKdxPFiSN2kSz5e-Hv2laKMiqt3J33GjqvZwSw7J0G15oSj7_EJB4VOdAnW8vR7G6Mujjd7GNmy58LD1EEcNrotw6umgKxsdSVWNutLyMxD7sKqFx1Z3CLH2GvBuxnU0bEQqAuz9F1eqI4tPvlUSA&t=AQJxfvqV9E2FxOB-jBY",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "12. Website không có đơn hàng",
+    "cta": "SIGN_UP",
+    "body": "❌ WEBSITE CÓ MÀ KHÔNG RA ĐƠN? ĐÂU LÀ LÝ DO?\nBạn đang có website nhưng vẫn không bán được hàng?\nRất có thể bạn đang mắc cả 3 vấn đề này 👇\n\n🔍 Không ai tìm thấy bạn trên Google\nWebsite không chuẩn SEO → không có traffic → không có đơn\n💬 Khách vào rồi… đi ra\nKhông có tư vấn, không có gì giữ chân → mất cơ hội chốt\n🔁 Khách rời đi là mất luôn\nKhông có remarketing, không có chăm sóc → không quay lại\n\n🚀 Haravan Website giải quyết trọn bộ 3 vấn đề\n\n✨ Chuẩn SEO sẵn từ nền tảng\nTối ưu URL, thẻ meta, cấu trúc web → giúp khách dễ dàng tìm thấy bạn trên Google\n\n🤖 AI Chat bán hàng 24/7\nTự động tư vấn, trả lời, chốt đơn kể cả khi bạn đang ngủ\n\n📩 Marketing Automation đa kênh\nTự động gửi Zalo, Email, SMS\nNhắc giỏ hàng, ưu đãi, tích điểm → kéo khách quay lại mua tiếp\n\n🔗 Kết nối TikTok Shop, Facebook, Shopee, Lazada…\nQuản lý toàn bộ đơn hàng & khách hàng tại một nơi duy nhất\n\n💡 Website không phải để “cho có”\nWebsite phải là cỗ máy tạo doanh thu\n\n👉 Kết nối Tư vấn viên Haravan ngay để được tư vấn giải pháp website & marketing phù hợp nhất cho shop của bạn 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJ900Cqa83eU2as3k2nCP49zrz5kDOQviMCvE6vGTB8gY-_z1YY8ir0DRs5l6oDUEr4LZ7b6lqX4U3L8R0tD9Z3xrh4b0ovzTDuEvoEkc5rupQyZurn6JnVvht1ZEV5ZjxBf8euHN2yXb8y_6Txs49_p-586I9lkmZM4ExCIS6b_3CVatCByV5--i52ISFwvZe8RRspkRKbMlcRhi9n5ePdigY8vG9iUWvVgGeWNFrIKg&t=AQKupMwPFnQI5AD4raI",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Website & CRM Marketing",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQK5RyypUMh3LM7wRlPYLP4YCPOzqdjUXhwM2P1Xm8tEgpcA_sG5UrmTRVRShv9aPqaBfXXtDG7_FX8UoEs7DvyjM1rNsXy90VM5JuDz9AdDyMAYk0k3TtyuBMCExhHLLUoJEXEEMqeKCCXqnl_zIXWFSc6IMzhrB1CntFPb5reJrQHVJzM7svEYBxs0oEYiqUj_bqIz2BZGijwqH9xSBaqXA2sNUmxArex1MXDl6EL5cg&t=AQJe-9oJLK-UNINTBzk",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Kết hợp Live & Website",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLWBErcmYNMXnHL0_ztfIubB0iIobO-I1KqBH7t9XkWOpTykCrSTJ09fTW0EmAom1d4a72p4n_Y8ZpSfu0fxm-OtXZ7DydERkUwuvA8ITwZJSZpW9yJiAt5jG3cg_Bxrk-jSc-pRVdFpzIvBWT33Sz5RYG6DweGLJBbhRJCWe7yhr6n8K0RwtXeESsoTj6D1uvinphguDOND6EBGaGvtJlcs1OCHLHfCN9mmy1GonFTVQ&t=AQKCOXmefxHRFL5yGDc",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "H1 2026 Path 1.1 Website social - Video",
+    "name": "Video 2: Không cần thuê thêm người. Haravan Website giúp bạn tự vận hành dễ dàng",
+    "cta": "SIGN_UP",
+    "body": "💡 LÀM WEBSITE CHUYÊN NGHIỆP\nKHÔNG CẦN THUÊ IT – KHÔNG TỐN KÉM\n\n🚀 Với Haravan Website, chủ shop tự làm – tự quản lý dễ dàng:\n✨ 400+ giao diện đẹp, hợp trend, phù hợp mọi ngành hàng\n✨ Chỉ chọn mẫu – đăng sản phẩm – chỉnh màu & logo là xong\n✨ Chuẩn SEO, tốc độ tải nhanh, giao diện chuyên nghiệp\n✨ Quản lý sản phẩm, đơn hàng, báo cáo ngay trên điện thoại\n\n📉 Không còn gánh thêm chi phí IT\n📈 Vẫn sở hữu website bài bản, uy tín để bán hàng lâu dài\n\n👉 Tư vấn dùng thử Haravan Website ngay hôm nay",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKUaOtKwv6Q5JqjU_8tqrUlMuBc9EXm_32x_iiMup7vudfqzElQvdRpZ9oFGxM73TNbj4YusNwarQMLHAdn2xG0oOukelyNi46TKdShAWMK74iWritisj2WUuqpwR9MWhy3qxgcVzTB_YNqfUoxIbTJBbBQOWpPkFvsfqDEZnR6FtB0BKETf98jFroVIcH_8wvBK5bGoysBsq6vwnH48vAAUTxr0hjt73zPOux0M0WPeQ&t=AQJjd5B5rhZK3wnyzNg",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichannel - video agency",
+    "name": "1. Đơn tăng nhưng lợi nhuận không tăng",
+    "cta": "SIGN_UP",
+    "body": "📈 Đơn tăng nhưng lợi nhuận không tăng?\n❌ Tin nhắn nằm ở nhiều nơi\n❌ Đơn hàng dễ bị sót\n❌ Tồn kho lệch giữa các kênh\n❌ Cuối ngày vẫn phải ngồi đối soát\n\nHaravan giúp chủ shop quản lý mọi hoạt động bán hàng trên một nền tảng:\n💬 Quản lý Facebook, TikTok, Website và sàn TMĐT tập trung\n📦 Đồng bộ đơn hàng giữa các kênh\n📊 Kiểm soát tồn kho chính xác theo thời gian thực\n👥 Lưu trữ & chăm sóc khách hàng tập trung\n💰 Theo dõi doanh thu, đơn hàng dễ dàng\n⏱️ Tiết kiệm thời gian vận hành mỗi ngày\n\n🚀 Hơn 60.000+ doanh nghiệp và chủ shop đang tin dùng Haravan.\n👉 Đăng ký tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJotf5DjX84AkTN4YqXloKSsJRMRUxrcM8Ya5uPko213gcHcEFUC5Cwi57pHNxfG7ojJIJUVcRuY0FPS3i7lG4HZfC9RXsOuCSdjk1mMKO3bcsLDUcM6YFpBwucQuLTUO8H_CyqrmP9ScFeB2W35YDPxtLquCwfdJtXhUl0S4KofWm5fSi-027N0hQTG9FBRWSGjE0ngSa-ZZX_SxsV7ts5aaQnl1l7cUXoJrZgHD5QHQ&t=AQJ_x1HjONJWY7ve6xw",
+    "status": "ON",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB25. Bán lại cho khách hàng cũ",
+    "cta": "SIGN_UP",
+    "body": "😵 Chi phí Ads tăng cao, khách mua 1 lần rồi biến mất?\n\nNhiều shop đang gặp tình trạng:\n❌ Chi phí Ads ngày càng tăng\n❌ Khách mới đến rồi… biến mất\n❌ Khách cũ không quay lại mua\n\nVấn đề không nằm ở sản phẩm — mà là không có hệ thống giữ chân khách hàng.\n👉 Mọi thứ chỉ dừng ở giao dịch đầu tiên, không thể tăng trưởng bền vững.\n\n💡 Haravan Omnichannel giúp bạn chăm sóc khách hàng hoàn toàn tự động\n✔ Ghi nhớ lịch sử mua & chu kỳ tiêu dùng của khách\n✔ Tự động nhắc mua lại đúng thời điểm (ví dụ sau 30 ngày)\n✔ Lưu toàn bộ tương tác để cá nhân hóa chăm sóc\n✔ Tự động gửi voucher sinh nhật qua Zalo ZNS\n\n📈 Kết quả:\n- Khách cũ quay lại đều đặn\n- Doanh thu tăng rõ rệt\n- Giảm phụ thuộc vào Ads\n\n🚀 Haravan Omnichannel giúp doanh nghiệp chuyển từ bán một lần → bán lâu dài.\n\n👉 Tư vấn giải pháp ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJZdlqxwg1PcMwKEeQ7SaJJYukwmx6aouYAT8Tlty42FopGiz8N7u5fphhXIQU72aBrQlha59jTr-2p_36ZuOhKXmaDjCW0qK5nWljVTXQvq6FX-opmUxYXBlS8UWMD2G4jtAG4MPugqwWl0wXaWPWYcILhcXW-mvfySGkbFMMyJAhAlmw-gZ0OILUYvFwynZkj1KYxYniWdaXrL7ZVsrAiHqvVFTbULrkngyEv5x2J5A&t=AQKVb8AnsZldDFZno8k",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB32.Có nhiều khách nhưng không quản lý được dữ liệu",
+    "cta": "SIGN_UP",
+    "body": "😵 CÓ NHIỀU KHÁCH NHƯNG CHƯA QUẢN LÝ ĐƯỢC DỮ LIỆU?\n\nBán ở cửa hàng offline ổn\nFanpage cũng nhiều đơn\nNhưng khi nghĩ tới mở thêm website lại thấy lo…\n\n❌ Dữ liệu khách ở mỗi kênh một nơi\n❌ Không biết khách đã mua bao nhiêu, chi tiêu thế nào\n❌ Khó làm khuyến mãi hay chăm sóc khách cũ\n❌ Sợ mở thêm website lại càng rối hệ thống\n\n💡 Haravan giúp bạn quản lý khách hàng đa kênh trong một hệ thống duy nhất\n\n✔ Đồng bộ dữ liệu khách từ cửa hàng offline, Fanpage và website\n✔ Lưu toàn bộ lịch sử mua hàng, chi tiêu, voucher\n✔ Bộ lọc thông minh giúp tìm nhanh khách cần chăm sóc\n✔ Dễ dàng remarketing và triển khai chương trình khuyến mãi\n\n🚀 Khi mở rộng thêm Zalo, TikTok, sàn TMĐT hay Instagram, mọi dữ liệu khách vẫn được đồng bộ và quản lý tập trung.\n\nChỉ cần một nơi quản lý, bạn có thể biết rõ:\n📊 Khách hàng\n📦 Đơn hàng\n💰 Chi tiêu\n\n👉 Haravan giúp doanh nghiệp vừa mở rộng kênh bán, vừa quản lý khách hàng dễ dàng và chuyên nghiệp hơn. Nhận tư vấn và dùng thử miễn phí ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIFPAoB9N6YFN5tcpuCrDtzvDAme2hxBqh-ayivz9O0yd8OnJYLkrsDMBD1xrUzvoTui6qOB4WDjhBGQD4wFrzwcwmOooIic6PwQ9rznA8fLbqnRE91QeoeJ4q1TJgve-SnvcwLrx75veYXKvsCsyeHoqKLKMZUpv5qx-YngHjaN8Tnuor-OiCc2YaU90difojzAudlcd9v6EI8iMF4UcYqZBzX9THbPNz6TKh2WAkS3Q&t=AQLSltbXdwiOiC8DsNM",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB33. Quản lý đơn hàng đa kênh",
+    "cta": "SIGN_UP",
+    "body": "😵 ĐƠN HÀNG TĂNG NHƯNG VẪN XỬ LÝ BẰNG THỦ CÔNG?\n\n❌ Nhầm số lượng, sai màu sản phẩm\n❌ Đơn đổi – đơn sửa rối tung\n❌ Cập nhật chậm → khách hủy đơn\n❌ Mất doanh thu và uy tín với khách hàng\n\n💡 Haravan giúp doanh nghiệp hệ thống hóa toàn bộ quy trình xử lý đơn hàng:\n✔ Đồng bộ mọi đơn hàng từ Website và các kênh bán về một nơi duy nhất\n✔ Theo dõi trạng thái đơn, vận chuyển và thanh toán rõ ràng\n✔ Tồn kho tự động trừ khi tạo đơn\n✔ Loại bỏ hoàn toàn việc ghi sổ hay sửa đơn thủ công\n\n📦 Nhờ đó doanh nghiệp:\n• Giảm sai sót khi xử lý đơn hàng\n• Tiết kiệm hàng giờ làm việc mỗi ngày\n• Vận hành trơn tru khi đơn hàng tăng trưởng\n\n🚀 Giải pháp bán hàng đa kênh Haravan giúp bạn kiểm soát mọi đơn hàng dễ dàng và sẵn sàng mở rộng quy mô bán hàng.\n👉 Dùng thử miễn phí và nhận tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLWkijPB7NI9P0lPVm5ey3fDOBlAGz0ZP2ciBjcCvXULE8A_T2UHjo-Ahz6VACJJoHNxxcQFlQOV2pj8v_fTTfG6xdtR_hgJlEUFLsRo7SKKb1uxcYYk2G7dlLP39LuZ0_w4GHv6zlT3udeUqC_lBcHvJEvKHVng8hPIGMIo0fih5esp_jFRT7r2GvDOr3sYOLoOmep0boOlimysswB64l-GYqs5GaRREg3c34ghI0wNg&t=AQLNibBFiYqmfKUp8u4",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB34.Thu chi & công nợ rối tung vì quản lý bằng Excel",
+    "cta": "SIGN_UP",
+    "body": "😵 THU CHI & CÔNG NỢ RỐI TUNG VÌ QUẢN LÝ BẰNG EXCEL?\n\nMỗi lần tổng kết sổ sách là:\n📂 Mở hàng loạt file Excel\n📑 Lục lại sổ ghi chép\n⏳ Mất hàng giờ đối soát công nợ khách hàng\n\nChưa kể khi bán thêm kênh online, mọi thứ càng dễ nhầm lẫn và rối tung, ảnh hưởng trực tiếp đến dòng tiền.\n\n💡 Haravan Website tích hợp Sổ Quỹ giúp bạn quản lý mọi giao dịch trong một hệ thống duy nhất.\n\n✔ Theo dõi toàn bộ thu – chi – chi phí vận hành\n✔ Quản lý công nợ khách hàng real-time\n✔ Xem ngay nợ phát sinh, nợ đã thu, phiếu thu/chi\n✔ Lọc danh sách khách còn nợ chỉ trong vài giây\n\nKhông còn phải lục Excel hay ghi chép thủ công.\n\n📊 Khi mở thêm website, TikTok Shop hay sàn TMĐT, toàn bộ dòng tiền và công nợ vẫn được quản lý tập trung, minh bạch và dễ kiểm soát.\n\n🚀 Muốn bán thêm kênh online mà không lo thu chi – công nợ rối tung?\n\n👉 Trải nghiệm Giải pháp bán hàng đa kênh Haravan + Sổ Quỹ để quản lý tài chính gọn gàng và chính xác hơn ngay hôm nay.",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKBt44YO-xY-QTQ385q_qP3PtWgOwb9pVX9sj1B51l_UWabOo4Eb_3CxIdWBl8WwHDDfHXTEsS3TsthkMMaKcUzhjblkqzTloO3KtPLaZYZMtEEMXegWiv_1YvidMujYignDtcePzYt8YkQmxizXYcNL3rp5iVjfl6wxDwluxy-Bk5dChwK9vSsSeq5q6suJPlPcr5h2bk1meISlMzuTwc8Vnycajssd2LLDDscAWp6XQ&t=AQJWASgoDmI8x48l7vo",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB32.Có nhiều khách nhưng không quản lý được dữ liệu (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 CÓ NHIỀU KHÁCH NHƯNG CHƯA QUẢN LÝ ĐƯỢC DỮ LIỆU?\n\n❌ Dữ liệu khách ở mỗi kênh một nơi\n❌ Không biết khách đã mua bao nhiêu, chi tiêu thế nào\n❌ Khó làm khuyến mãi hay chăm sóc khách cũ\n❌ Sợ mở thêm website lại càng rối hệ thống\n\n💡 Haravan giúp bạn quản lý khách hàng đa kênh trong một hệ thống duy nhất\n\n✔ Đồng bộ dữ liệu khách từ cửa hàng offline, Fanpage và website\n✔ Lưu toàn bộ lịch sử mua hàng, chi tiêu, voucher\n✔ Bộ lọc thông minh giúp tìm nhanh khách cần chăm sóc\n✔ Dễ dàng remarketing và triển khai chương trình khuyến mãi\n\n🚀 Khi mở rộng thêm Zalo, TikTok, sàn TMĐT hay Instagram, mọi dữ liệu khách vẫn được đồng bộ và quản lý tập trung.\n\n👉 Haravan giúp doanh nghiệp vừa mở rộng kênh bán, vừa quản lý khách hàng dễ dàng và chuyên nghiệp hơn. Nhận tư vấn và dùng thử miễn phí ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJNyh8QBREhA4OHA5WZBU6xOX0Qnd9DjJf6CFRkbp74IIl19qScvXJbsOqD4l4eegOsp6-wrUyag_xEBoHK1uT8xyd0tJMR3iAZ9do8dsTbWE0HjNF3Vhq1VwPrUIhrMJIv3oBDU1zOz7xwmiwxmDxuc6x8LrGK7NuwMhgqJBgZsJXrtdUkKQ-8Z0V0bjLSfmX78m9S_2vbrg3mYNGfR7vewHuGgMF3nvFWG9-Dx7yDkA&t=AQI9foRzFZjsbLqthfI",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB31. Đơn nhiều nhưng vẫn quản lý thủ công",
+    "cta": "SIGN_UP",
+    "body": "😰 ĐƠN NHIỀU  NHƯNG VẪN QUẢN LÝ THỦ CÔNG?\n\nMỗi đợt sale là một nỗi lo:\n❌ Sợ nhầm thanh toán\n❌ Sót đơn giao chậm\n❌ Mất hàng giờ kiểm tra Excel và ghi chép\n\nNhiều doanh nghiệp nghĩ muốn quản lý đơn bài bản thì phải thuê IT hoặc dùng phần mềm phức tạp.\n\n💡 Haravan giúp bạn quản lý đơn hàng đơn giản hơn bạn nghĩ.\n✔ Theo dõi trạng thái đơn rõ ràng: đã thanh toán, COD, đặt cọc, đang giao…\n✔ Quản lý đơn từ website, Fanpage, Instagram, Zalo OA, sàn TMĐT và cửa hàng offline trong một giao diện duy nhất\n✔ Lọc nhanh đơn đã thanh toán / chưa thanh toán để kiểm soát dòng tiền\n✔ Bộ lọc thông minh giúp ưu tiên và xử lý đơn nhanh chóng\n\n📦 Khi đơn hàng tăng, hệ thống vẫn chạy trơn tru, dễ kiểm soát.\n💰 Thanh toán minh bạch, vận hành tự tin hơn.\n\n🚀 Đừng để việc quản lý thủ công làm chậm sự phát triển của doanh nghiệp.\n👉 Liên hệ Haravan để trải nghiệm quản lý đơn hàng đa kênh đơn giản và hiệu quả hơn.",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQI-F6kfDjx9sUpbdrnYIEqOtXjCNkmQ3L_-DNSKVmB6KzNAuLYK6Tzdz_m1XUmBFsx2VWfKY7kQqswVqky5FIcVcNOfG_OIlXSzQ3eEKKPA5RngvP2wvZUxMNj10kklorl5IXxjkyIV71EN4d5LlkZrP5ldgPDfSU6IO4TXMPtwnrcy_boY_8-V1NPJXl2LcsIgXqJKTGrUBEdLaHzrGBxpcK4WsqDFafB2zvdot-7BJw&t=AQKcMNsNJ4aqyRuGXjY",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB30. Quản lý khuyến mãi",
+    "cta": "SIGN_UP",
+    "body": "😵 QUẢN LÝ MÃ KHUYẾN MÃI VÀ CHƯƠNG TRÌNH KHUYẾN MÃI ĐA KÊNH\n\nMỗi mùa sale là một “cuộc chiến”:\n❌ Tạo quá nhiều chương trình khuyến mãi\n❌ Dữ liệu rời rạc, khó theo dõi hiệu quả\n❌ Không biết mã nào mang lại doanh thu thật\n❌ Dễ thất thoát vì quản lý thủ công\n\n💡 Haravan giúp bạn quản lý khuyến mãi tập trung và đo lường chính xác\n\n✔ Tạo nhanh nhiều chương trình: giảm giá, Freeship, đồng giá, Flash Sale giờ vàng\n✔ Tạo voucher linh hoạt theo từng nhóm khách hàng\n✔ Theo dõi hiệu quả từng chương trình ngay trên một màn hình\n✔ Kiểm soát trạng thái kích hoạt dễ dàng trong mùa sale\n\n📊 Không còn đoán mò – mọi quyết định đều dựa trên dữ liệu rõ ràng.\n🚀 Vận hành gọn gàng hơn, tối ưu doanh thu trong mùa Mega Sale.\n\n👉 Tư vấn ngay giải pháp!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLpqnecAYkHGbA8mDbMg-RWvLg7bp6EoH0wIe3Z8dPjB9CZLJ_Zw2Oe96yXiRwivG3VZsg2IeYPCKwa0wWePLoi8U_hputouHna-ALQv55H9SEHegQ884jWR79t9S0YVUoe0JVzhdv7C0T80y0xcvQrDzAurENcshl1evHRgW4SCy3e3IHuDm5qmqwUr6avVeed_ZwcXrBynYXGfEDahwQt4zPuK3Rvu_uCYbIbLU7uEQ&t=AQL5O-w2CvwQ2nU8Hx0",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB28. Quản lý vận chuyển và thanh toán",
+    "cta": "SIGN_UP",
+    "body": "😵 ĐƠN NHIỀU NHƯNG QUẢN LÝ VẬN CHUYỂN RỐI TUNG?\n\nMỗi ngày phải:\n📱 Mở nhiều app vận chuyển\n📊 Nhập Excel thủ công\n🔎 Dò từng đơn khi khách hỏi trạng thái\n\nChỉ cần đơn tăng là bắt đầu:\n❌ Dễ nhập sai – sót COD\n❌ Không biết đơn nào thất bại\n❌ Không kiểm soát được tiền ship & công nợ\n❌ Mất thời gian mà vẫn dễ sai\n\n💡 Haravan giúp bạn quản lý vận chuyển & COD trong một màn hình duy nhất\n\n✔ Gom toàn bộ đơn từ mọi kênh về 1 hệ thống\n✔ Theo dõi trạng thái giao hàng, COD, phí ship real-time\n✔ Lọc nhanh đơn chưa thu COD hoặc giao thất bại\n✔ Hỗ trợ 15+ phương thức thanh toán và nhiều đơn vị vận chuyển\n\n📦 Đơn nhiều vẫn xử lý nhanh – rõ ràng – chính xác.\n💰 Quản lý COD minh bạch hơn, vận hành tự tin hơn.\n\n👉 Trải nghiệm Haravan ngay hôm nay để quản lý vận chuyển gọn – nhanh – hiệu quả hơn. 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKDlWQmNFPw6_fSTrFRR8zOjPHDI0JgMzyHp1aKse0oJtvUNkG5S_-2-eibqMYhYTSUPyXJXB9VLiNz9wb1ea1G1EA8tSWu3UUNekz1fE4IElj8yzbQwgyy__TLHuhpFXhgUOXmzXNGk6hBUX5a6EjPkW9P-gi1-7K4RNvOkBsj_4ZGN5Hphgy5cVAvUYzKr5AeGWvSzPs3_9T1ESRjnpFoFMMJBr5AqR-6z6z5BytnWw&t=AQJt_iuSgzgpYCtw_6Y",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB27.Báo cáo kinh doanh trên Haravan",
+    "cta": "SIGN_UP",
+    "body": "😵 BÁN ĐA KÊNH, SỐ LIỆU RỐI TUNG KHÔNG BIẾT SAI Ở ĐÂU?\n\nChỉ cần lệch một chút là:\n❌ Doanh thu không khớp\n❌ Ghi trùng đơn\n❌ Sót công nợ shipper\n❌ Ngày nào cũng cộng tay rồi… sai tiếp\n\n💡 Haravan Omnichannel giúp bạn kiểm soát toàn bộ số liệu trong một hệ thống\n\n✔ Đồng bộ đơn hàng, doanh thu, công nợ, tồn kho từ Facebook, Shopee, TikTokShop, website\n✔ Dữ liệu cập nhật real-time\n✔ Báo cáo rõ ràng: doanh thu theo kênh, lợi nhuận thực, khách còn nợ, hàng tồn\n✔ Tự động hóa hoàn toàn – không cần cộng tay\n\n📊 Chỉ một dashboard là biết toàn bộ tình hình kinh doanh.\n💰 Không còn lệch số – không còn lo sai tiền.\n\n👉 Nhận tư vấn để biết cách kết nối mọi kênh vào một hệ thống duy nhất và làm chủ toàn bộ số liệu của bạn. 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKjpJpB-X4GSOUg16Lhs1FIw1nClnWDQPb-KYxcxTcY3u--UUyJb-1T9UVtGY4fy1ZJpQBihoCGrabX9Sw3GYfIELVZLarLKOoOCRlWx2KsSWKCxAd-QkBibsRm2d09E7-Ue8NIQWmJZy3mr2fBnRIyIWLBcAIB6S6HVPyLrX5LFVXh1vboWlMTHFPNjb403p5iEQVZoQJuk-x9q_aJDgLtVY60Uxg9l01qYw-84PmwGA&t=AQLq_1qKkDiGgZTQl0w",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB26.Tự động chăm sóc khách hàng",
+    "cta": "SIGN_UP",
+    "body": "😵 CHĂM SÓC KHÁCH HÀNG TỰ ĐỘNG VÀ GIỮ CHÂN KHÁCH HIỆU QUẢ\n\n❌ Khách bỏ giỏ chưa có quy trình nhắc nhở\n❌ Khách mua xong… không quay lại\n❌ Mất cơ hội upsell vì setup quá phức tạp\n\n💡 Haravan Omnichannel giúp tự động hóa chăm sóc khách hàng từ A–Z\n\n✔ Tự động gửi tin nhắn cảm ơn sau khi mua\n✔ Nhắc khách quên thanh toán qua Zalo/Email\n✔ Gửi voucher sinh nhật cá nhân hóa\n✔ Chăm sóc khách hàng chuyên nghiệp tự động\n\n📈 Chỉ sau thời gian ngắn, khách quay lại nhiều hơn, doanh thu từ khách cũ tăng rõ rệt.\n🚀 Không còn vừa bán vừa chăm sóc — hệ thống lo tất cả.\n\n👉 Tìm hiểu cách giữ chân khách hàng hiệu quả với Haravan Omnichannel >> Tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIoCFf5ooxbe6O9xuBn3vQzCVco9HInJaOFIXOcIjLmynqr8W-PNlTifKV1H4-7ccYSwvgEMOUKd0HevEscECIDZn4Dh7WHKsyosw4AFlcpfCLHwXqvoTeFe3i2LjzsA1DJQP4k3EEgVpUisbTl7xxSJM8GbJcN9JA0ScQ170FEdf59qlRGjfTD_f-9awDgamabeSeRr6V7aTq8pKv9FL6Yw5z1xBOl8ELqxEyVN8Q9aw&t=AQJRKraz08kC0uv-fH4",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB25. Bán lại cho khách hàng cũ (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 Chi phí Ads tăng cao, khách mua 1 lần rồi biến mất?\n\n💡 Haravan Omnichannel giúp bạn chăm sóc khách hàng hoàn toàn tự động\n✔ Ghi nhớ lịch sử mua & chu kỳ tiêu dùng của khách\n✔ Tự động nhắc mua lại đúng thời điểm\n✔ Lưu toàn bộ tương tác để cá nhân hóa chăm sóc\n✔ Tự động gửi voucher sinh nhật qua Zalo ZNS\n\n👉 Tư vấn giải pháp ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJpdDp36QOd0v8WM7vpETohQvS2gH6CTs3ho5nDkK2w2Qh0tX2E9knXnxeidCoT8C0PeBAUTYy7CMZJfZu27-l0MJGxcUgNxLsJHJF5yx9WRtj9zeTJTARrSJollTj5BQfgvfOwa1x-VShTbDjjTLn3EyC6oTwPmeVH19k85dP9pNNOF4UVBuDopw3wr4x8Q6WUSqNs3W3I4xA1cIma3H9qyFwXVcrZDY8_OjVYvYfuHA&t=AQJUWuwAAaGkoU68WJU",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB33. Quản lý đơn hàng đa kênh (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 ĐƠN HÀNG TĂNG NHƯNG VẪN XỬ LÝ BẰNG THỦ CÔNG?\n\n✔ Đồng bộ mọi đơn hàng từ Website và các kênh bán về một nơi duy nhất\n✔ Theo dõi trạng thái đơn, vận chuyển và thanh toán rõ ràng\n✔ Tồn kho tự động trừ khi tạo đơn\n\n👉 Dùng thử miễn phí và nhận tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJQ3lU5WXYYKGXLP0aYL1WLQ7xDAnCjdd1-_gBpGOvz4_NhDOo8PJnF8sgRO8-1h-FcwT6ch7nMOTzHO61YPz6eyx7nIgHjrTzDl9cLgrRk5l-JJ8smwrRDlrq89LJ0D42IYL1xtQHSbtzObbMU5MMfAiMiETCo5IVzRiPwfwV4QHJGdBe1wIVSjlXcItA63PT5NHFj-6iShWE3FPEPgw12qmMYUqfSoGdM05PbAqJePA&t=AQJfLWtKviSh2_Qw6KI",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB34.Thu chi & công nợ rối tung (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 THU CHI & CÔNG NỢ RỐI TUNG VÌ QUẢN LÝ BẰNG EXCEL?\n\n✔ Theo dõi toàn bộ thu – chi – chi phí vận hành\n✔ Quản lý công nợ khách hàng real-time\n✔ Xem ngay nợ phát sinh, nợ đã thu, phiếu thu/chi\n\n👉 Trải nghiệm Giải pháp bán hàng đa kênh Haravan + Sổ Quỹ ngay hôm nay.",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLyZzqM0sZ_hUUbzQqb32YVWFdiQzUz03f_QGofniS3YCTAvXJ_cQF-PFJRBZZLQmhwPPwPVAluqG2S32ZW59eusXWgQg_WJsTNmnaYheU8lhNTvfXucQIlk_DZh4ZEAvD0KjBXM3rZ4nK8Kll9MuYoHpFjxh7a6Dx1VXjOXDZY-pVBkzUpF4gxsok7zVN5GWVWjqEORMckyjVY4xrKRhTwor2TzUj7XXwnzgjMKJSeeg&t=AQKVBriezEba0oQX1f8",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB27.Báo cáo kinh doanh trên Haravan (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 BÁN ĐA KÊNH, SỐ LIỆU RỐI TUNG KHÔNG BIẾT SAI Ở ĐÂU?\n\nTối nào cũng vậy:\n📒 3 quyển sổ tay\n📊 4 file Excel mở dở\n📦 Đơn Shopee chưa cộng\n💬 Khách Facebook báo chuyển khoản\n\n✔ Đồng bộ đơn hàng, doanh thu, công nợ, tồn kho từ Facebook, Shopee, TikTokShop, website\n\n👉 Nhận tư vấn ngay. 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQI6lxE6o7g_mGGNahmpovS8QdfSYSzoMIvbrfJIYVDz2R3ZsUnCiIvc5dMrnVktvAL8jEFgq2WVaOZXOGVqtL1lqc4o3IfMvq8V4gd4RJf-o3cSvLtFKc80WE-3r7DSSrZN9toRbJo1qrFIQUFrbGnUwcv4OEa59JRmyLyzwbheQrqXEZRwZvgiXRFIZyZl0D6S6Z-0V5sVpfdPon07aoxCA-haRnoJXT-tth6wysOcWg&t=AQJEUbiBJfho5aHsA8w",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB35.Tồn kho rối tung khi bán nhiều kênh",
+    "cta": "SIGN_UP",
+    "body": "😵 TỒN KHO RỐI TUNG KHI BÁN HÀNG TRÊN NHIỀU KÊNH?\n\n❌ Điều chuyển hàng dễ nhầm số lượng\n❌ Online còn bán nhưng kho đã hết\n❌ Nhân viên phải kiểm tra từng kênh\n❌ Sai đơn, hủy đơn, mất uy tín với khách\n\n💡 Giải pháp bán hàng đa kênh Haravan giúp bạn quản lý tồn kho thông minh\n\n✔ Tự động cập nhật nhập – xuất – điều chuyển kho\n✔ Đồng bộ tồn kho real-time giữa offline & online\n\n👉 Nhận tư vấn và Dùng thử miễn phí ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQK9kur10paNUMozJoMyhgEhwH31wIK1PmjN3KKk5Bqic-OFw8j2GSKfx4M5CUI_BngWmXxjSUTGMguhoVuxzZWBSeQmPYYTzhZBV6jQLjj1gCaagENYaJf73rzhwGrFC3NQFJXRvq0tbceeuLlmOnLlkQkWZbo2c-5eQwztIHNEjclsjaWTcNdACQzUc88c8x-a08gylZ7GH-_J98m4zk_bqW0_lIGadNUWV48wGjli1w&t=AQLAvXFQmwV-etgkGIc",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB31. Đơn nhiều nhưng vẫn quản lý thủ công (2)",
+    "cta": "SIGN_UP",
+    "body": "😰 ĐƠN NHIỀU  NHƯNG VẪN QUẢN LÝ THỦ CÔNG?\n\n✔ Theo dõi trạng thái đơn rõ ràng: đã thanh toán, COD, đặt cọc, đang giao…\n✔ Quản lý đơn từ website, Fanpage, Instagram, Zalo OA, sàn TMĐT và cửa hàng offline\n\n👉 Liên hệ Haravan để trải nghiệm ngay.",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQI113mjMUs7lhSaMqmvaFDTAO9PFgCQfHQxkCIKEwr5k1t1mfReOdqspjppuiEQogA680BN5BX5SC5DpzPozYbjC3aKMRi5A2tmMd3HlI5p1RQMW7X60dj6WMb_Cm8NQYKeVEirqlFd6ELq_GufITWM0o2LqOGm6QMui4J2UzAf5-bp3aLy5M97nXczWSzUtVmM9XYWO6535RPkRl0BT4K2bgSCOq1yoZ5D8a-mrOsEtA&t=AQJ0hlgs3o_vOY8pJR4",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB30. Quản lý khuyến mãi (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 QUẢN LÝ MÃ KHUYẾN MÃI VÀ CHƯƠNG TRÌNH KHUYẾN MÃI ĐA KÊNH\n\n✔ Tạo nhanh nhiều chương trình: giảm giá, Freeship, đồng giá, Flash Sale giờ vàng\n✔ Theo dõi hiệu quả từng chương trình ngay trên một màn hình\n\n👉 Tư vấn ngay giải pháp!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLYW-bBQDUOLML3nnIg8FYK8rgp-ELWy9NA1A00nmUs9S1chiEuJp0yz33pVVifR1iEDu6fL9McO8ytZ74AVDyeaEw8LjyHq2YKldjXsAF9h01suPzUnxFuDS-ZFSRq9w878nzpxwwcSxWTP1JbhfZwnB0PFIiMFs1gQsuuwwbhOBVcIk6-nCBjJSScIglPOqp0rxM2xSrg8hgf-5PH6ZDxaC61WFIIQ6V_lfHrmn9rAQ&t=AQLLV-lK3Op0WKJvY84",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB26.Tự động chăm sóc khách hàng (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 CHĂM SÓC KHÁCH HÀNG TỰ ĐỘNG VÀ GIỮ CHÂN KHÁCH HIỆU QUẢ\n\n✔ Tự động gửi tin nhắn cảm ơn sau khi mua\n✔ Nhắc khách quên thanh toán qua Zalo/Email\n✔ Gửi voucher sinh nhật cá nhân hóa\n\n👉 Tìm hiểu cách giữ chân khách hàng hiệu quả >> Tư vấn ngay!",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLYhleG-e2V-Ru85vT8FWTSZ6UuTV1j_rfO5xoH-dUhTAR5bF-FWr2FlaejrjBw9vglilcEbEJczH9QGyj4SdW4t1o528qnc8Kb0ex5Njfp8XPAKqy-b_4UelYefA9vtBZSewnElX70TVx4ktcc8TVYgt8I7oVtkBS9wLN20Utip8JwwRdL9VJ8WvpbS3X_KYgzTOrKHSIhF5VKdF1XKeNR6aDk4USjrUKVfxWLYhSxBQ&t=AQJUXzj9Yax_djqmsvg",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Omnichanel 0107",
+    "name": "VDO-KB28. Quản lý vận chuyển và thanh toán (2)",
+    "cta": "SIGN_UP",
+    "body": "😵 ĐƠN NHIỀU NHƯNG QUẢN LÝ VẬN CHUYỂN RỐI TUNG?\n\n✔ Gom toàn bộ đơn từ mọi kênh về 1 hệ thống\n✔ Theo dõi trạng thái giao hàng, COD, phí ship real-time\n✔ Hỗ trợ 15+ phương thức thanh toán\n\n👉 Trải nghiệm Haravan ngay hôm nay. 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIS9zwiX4Z-jl6s4UuV464W43GeIk0zorJ5cITlHO5Mzyk0jxdh4Bb2SY1pKThdU0TzPc2oLgR55hSIzcPLtAn4WgyT77NQDdoKmnt4Nve2vHE6eWVWxaU67c1KHGQuMjIiEu77ecKgskdKTts1UjXoU2TqJrRgtJw0IwU7xLZHMatsPDIYh0mNSupM244KGdgvYPjBrme7vj0o-SDIQxj4DvYWH7eHR9-OOv4TSq3q6A&t=AQJ-bIxNYorKQ4FCD0A",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "Website showroom nội thất",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIafvhADjWwq6KsY-ETL2mAKvyAL5dpmOw1HuLn1CGuqIZQTIgJLjBiYYTKI4BVmD8bcVUkLlZFUcI0VfJoC_HMHvBJGFHT8bbrq4l_26f_D7NP16zR6L3WiR6ijfePZxzmALrWJVD61NgeisjO7UWkHGpCA2p_BJfLaLdtMNbm8mSsc6mBtKDDG0Fll4KCoHIcAOe1B1RBQN0iCSHUqA4HzFXRK_OlrmzZjw2vILBAOw&t=AQI-G310lB99CG_CBPk",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "11. Làm website: phức tạp và tốn kém",
+    "cta": "SIGN_UP",
+    "body": "🚀 LÀM WEBSITE GIỜ ĐÃ DỄ HƠN BẠN NGHĨ\nTừng tốn tiền triệu làm web rồi bỏ xó vì lỗi, khó dùng? 😥 Cuối cùng lại quay về bán Facebook cho nhanh?\nBạn không sai — chỉ là chưa dùng đúng nền tảng.\n\n✨ Haravan Website giúp bạn tự tạo web bán hàng chuyên nghiệp mà không cần IT hay biết code.\n\n🎯 Với Haravan, ai cũng có thể làm website và bán hàng tăng trưởng bền vững",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKrcxRmmNeE84cftF9Og9Nhrrvdo9Fgm-LalqBlTOdQRPT7S616AKz71LO_bbuzxW9s1gb8Xa8JE4D2mYZ35L4bcxQALEcIRXgajqUNKQh-slMlKhSl46Epj-ofsOe_xTanBINcOj6tedUDPsIPEiQ7l3fNjsF_2CF6wUSI2svlAGpwEtFL5MeW3Hu642DJz5uvt6qdOGe-msT5Vh8uq4D8Su77vP273er_ufO0gtAbrQ&t=AQLMMk3sRSujEvrEGjA",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "Làm website nhưng không biết bắt đầu từ đâu",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIGTs77k5lyhEye3OqcItI6HufXjzCedGpLryOdYeXta_S1iPWV24VqQ3UqH-ahz8UM7NU-ySdGi4JRPTZypp1GrNGsqIrvlnfmV3jMCBvKli-Dl8s9rOK6Vt3uHxzCLNSdMkuOaaxDcDyZ9u3g-Q_lVOhibdVt8UTsh1jtwE3lq5aNxgeueZdegqnNepYY3v2Nf4AsR4NPquQOd0IlydP6mAe4r-f297BCmmjHcJwILg&t=AQLy_zB40fwysFNCJtc",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "Giải pháp sở hữu dữ liệu khách hàng",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJCkoNGD_EK5MSrobZ_heBjH_vsDxitd84KULecfCdM1GA2SzvlVJ3jFnY33KUC932UzifJ3AclqOBlYkvUKlSueiLMdHsCLo3y878u4DnZYfcd6Bcexw1ry8ZAJEIN2ykG4WPL0B26y-JIqvIN7bqMFtYsOpHc-81Oc2mUs7ZcOSmFnH_tztaCJKotzN-RKrsRs165AUcG3vgDYWifdQExns6o3o2Kn1oYND45tgoPuQ&t=AQJ5cFU8VzVd1f_NyuU",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "Kết hợp Live & Website",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJXu53cFQiYZp5WNit9HbwE5TmIZlTEkiz-bhAzeHO6aJTKB-SpOcq-HPnRC9c9N2Gp-oILBgtyaiQYduc4Ne8v7JGVu5T6tOpfCf1sB7ZILMASyjQx88F_A3k5ws1RhggxLQ7SQVWavDlBzncV105hYGotcBbWhtJN1lVTEEy5iuCrCTqo1XQkYbuuqJqEdGM8ll5aOyVl8MuLwiM0m9PGySMpeyYWo_SMUeoaM5aH5A&t=AQLKSGzhJQKmRLyk_uA",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "12. Website không có đơn hàng",
+    "cta": "SIGN_UP",
+    "body": "❌ WEBSITE CÓ MÀ KHÔNG RA ĐƠN? ĐÂU LÀ LÝ DO?\n\n🔍 Không ai tìm thấy bạn trên Google\n💬 Khách vào rồi… đi ra\n🔁 Khách rời đi là mất luôn\n\n🚀 Haravan Website giải quyết trọn bộ 3 vấn đề\n\n👉 Kết nối Tư vấn viên Haravan ngay 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLZoKprrCDURpUmBGO8EL-ypvVRd2PQIf30AFpiK4TpoU4EHpwjbp8TqJl3kowZtkWmxLUE6TqzGSNzAS2JDrJnmHBMpCMHkbnllCOiFL4BD1Ht14HLSST9Ek4VI1AxgzMoQqdB9UQL_1lxZC4oviIL0yeaPi908Vg37daT5Gf_L3WIxuILRPhwXwW3tpVu_qOo0ywQcm3Q3ulNh83jwfBIVF52Hj9zr8j1hb920Z0IYw&t=AQKbMlVAZjMsgPC_KjA",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Ecom Website",
+    "name": "Website & CRM Marketing",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQL7njq1jHZrDm5Pv4o-UIl7NOui0Btd1za9-vPAPY9Zw2w770jAkpxcVBxHCyRkVMXSTDNdHX2EPLbsis-xvYsHG_Dt-N8DZIznozTVEf7-GEqvxcT01tSyq3-oUuTob_GDkbgXLLh44X4hcanemSpi2XAfmEVcCqsepFlqcuHJDhsm8wHjZt202GEf7m2nBr3SoDqUGnL1suPHrly7dbXYwacGFZCpIHeKu1e4gdX9DQ&t=AQJT_G28ptHpEaJ-zYc",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "Website showroom nội thất",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQL6iBnpLV0MO4n3VVIVYao6xaftXQV9ComvQ-HnKy3gg6Fcwptqh3SqP7YsNyqIH8UnPtm5ytD6yF971Ba-IhrHRzv4aQcSQffwP_tzVJOtTvK1peT9pLPf1W-zbUm3SymHKCSIr09kPgLdWo90JKk2znK3DV0cS3zYLyb1D3fjLKIOPI62lmvHDb14Nbu2tIBXK9xjMz94czoFoHlYI7saE8dGwj23SudwZxduISXXXg&t=AQKy1I5wcho_9gvXGkg",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "Làm website nhưng không biết bắt đầu từ đâu",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKGNFmQOPQBAxsiedUFOSoH3mNzDIfKcQ_Wp69hKUGlY9phnDjaXtlGeynLBnNPFq222GVuHo_FWfe3e4YMAdfrz0er6wuzMEV1sm9elF-z9cCNOqY7iHjSwjopyALuvv4eJuykhhbvaF06fdAsh7h2r4qytPjrS-wX1wuD7_LMvfu-GSenw3KKGk2WpIGa9vMZYj0tSjtl5zC6ueQqlXqX6y7pqeSH8ngmAbM2a1gWvQ&t=AQLsWlv79Hi_jJhcmHU",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "11. Làm website: phức tạp và tốn kém",
+    "cta": "SIGN_UP",
+    "body": "🚀 LÀM WEBSITE GIỜ ĐÃ DỄ HƠN BẠN NGHĨ\nTừng tốn tiền triệu làm web rồi bỏ xó vì lỗi, khó dùng?\n\n✨ Haravan Website giúp bạn tự tạo web bán hàng chuyên nghiệp mà không cần IT hay biết code.\n\n🎯 Với Haravan, ai cũng có thể làm website và bán hàng tăng trưởng bền vững",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJLz5XfTlUv7sowX-NhLw2bFiwqag9qZfT7eiQP4ILvuaywHgl4raXQ2AtFqOYixrNiRn49Suk6Y9-ayQyc41TkgzQZUgB2NmNluDeQdqgG7NypAYLXJ2nr30BNc_oEINFLgL7hkaum7TlDKRrWUhVkv3-3FgYbBoF4Ug2arjKQMUZlAkdTdwRLdTl9iml7ovPRoQe_CofICFuBhWcUNSyWOUKu53Y6jWHpKjyrfmIkTw&t=AQKfU1eKkavBrMGPXhA",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "Giải pháp sở hữu dữ liệu khách hàng",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJv5mpNClRttTyxmRnK9c4i7lyHGrlW1ouPHLv4A_8jpxdCTUyvgqK04EoG6YhDbYmiFJupFMhc5LxGWRcXVnIRlq18Np4g6Smht2LHKJESnWSiEhnffmHuQMygD998s44OmH7EwGvKgKA4S_5y62MZWRPBpr7y_wp4f5HoYxb1UmV8zEwIz0Cz4IbCzKbxU6ncHkPAa7jh8hnPqiXg4BW1aTOi23HbaI_JbJDyF1MM2A&t=AQISi2-yRFOaWfPlnBk",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "Website & CRM Marketing",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLL5n0cEVJ0LC2CzWJRVTnB_ejz4CbN2HZ8IaOWAPGG-uRpCKJxNYgJztgaPUiuo6zxBn9CXkOqC2NpBQlwdfiUgIs8bw8Fdy8aSbydEwes-i3UsURCgif3k0ua7iIzuXBI4yaDY0HPuTbqf3G0Oco6xDPyxo2qKi54RegWN7y9bBcxzA3bWIZhPc4ur_2uUpZQp9kHXwkimN7d901zhqDYDNqpoK9VLHJUIF4bHboALw&t=AQLpMHkoi6TqRxP4EQY",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "12. Website không có đơn hàng",
+    "cta": "SIGN_UP",
+    "body": "❌ WEBSITE CÓ MÀ KHÔNG RA ĐƠN? ĐÂU LÀ LÝ DO?\n\n🔍 Không ai tìm thấy bạn trên Google\n💬 Khách vào rồi… đi ra\n🔁 Khách rời đi là mất luôn\n\n👉 Kết nối Tư vấn viên Haravan ngay 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIBlhzCymZk4QZ7yix4fZ4o9LuXgDMZr2lmeu_L4hS7rFyiFrZoTnQNr9-tem5PchDh8WcFHepXA-X6gLRxF_PEbd74OF5yRxtjgkW0RlA9f1Q2gGIQQiQp1KJ5W4zBwozl58oBzHrmopQSkiGIPBN0BbtWp1rp_C4VYo-o5KDDhvqvWBRFUyd2c492Avp7ttfVqiwwQIGl3esTMxaC51HeQksfKOVONIeSLxgJjINdQQ&t=AQK2HBON3GwwQqWe0Og",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Test - Path 1.1 Website",
+    "name": "Kết hợp Live & Website",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQL4hhMD8z4_GG1-sWLjUCmr7ReZeFzzzEsqgZWSbEKWUbksGMGgvH08jWj5nb5ixGhVNEYvU4LW7PpquNKmgZoDLPOZNc5MsWjRCfTbaaVC0ME1a1XtGCndFrDtTsuEZl2I9w_-ReXr9UYZRnhC5O5dzonz7ACuZaKlSnIAfdvvAPeThRi5wST0C29q7lQIfC1TOkKpHn-MRgff_CfUIJqy8bvnp6XAbATBZg3JQ3mnew&t=AQKH1SAVTqJr_eDYtUc",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "4. Tối ưu web giới thiệu tour du lịch",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQK8kfGk7MayOp1Rlw9LVktgz1Qil6pLR8SlMKeUvac5X7Kgi6LVk-mZdpoOawTtLCVwwsH5UNswrOQIYqq5rDBW_hpdr2WjZpdpd3T_ag8abjByiuPTa0jGVP_S-nY9XnyDtWQ2vrYVECO2NqTNa_iZvORX5-fUrdWdQONkPT3h-opZVDgVfIe19flZQrzNS3jKAocRvhvsanBvpRgGWw3lp0CB-l2-U6-JA8aNwWvmyA&t=AQLzz7CRvPtWeebpMYE",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "5. Website giới thiệu homestay",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJtGPhMJV8SjMLMJX1pgpcqsQhfd1kqw9NpB_BhssS5kFTykxG-7hVgD9FdM1A0TqKGN2Qv6WN7LPBDQoV7DsDn5pdnzjb9QOjc5N3Qb6oKxAXR5agPCRpeizhwQPSqxQW5y4MEa1cS1aimUix6dE6F4btDgyus62biPQ1Se8dSd3fB0mI1tKT022llBi3CXnFtOkSzVn3G-59QuEnECVthg8RgFnz9uVeZoJlkUP1KLw&t=AQIaWioc6Ie9WAriyKI",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "3. Thiết kế web giới thiệu tour du lịch",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJb0y31rMs6zi3LKSPWofLSDSG5RJ1xFu-R4Bu6Y85X8J8vX7k_OiS3dzSt_wL1Fg15TjxWTMIwFp_2aX9QZ4STbLQroE73JpaaMOa1TAJtswTkTdi4AQOa6fYCXBNE6prH5dFAucmLm0O5sEhHDNqRcfCTdY4AnhriSh4RMGdiJkWnTtqL3HDiDlrs2g7LFZ0hUY_kzTrAaEiNVyg-vznIuNC-7lMY-C1c5JNWlaeJ5Q&t=AQKcuF5k5KiMxIgmPhQ",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "7. Website portfolio",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKSfTubzXWUSTAnkUonIRfdsUBpNi56PPFfIKKthG01BNRJSOmbO55JS69cN-yyZ7Ql27ESUJc2naCIfk-YjLlNiPozUBWW_Xf04W81hodpulb_HYthowl2kBAImSEdRXha4SnA2InWumWCaIsBi58nJaYpy7woh3jqcAWl3bgKdt_Mc_qklixnFbPbZS8cEVi4Wi-FJDsAUjmHOHRzC6LYHBeIuyuvObj4iKSxa6Phgg&t=AQJyqIUNXoGfIUVJqms",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "6. Website giáo dục",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQI6-M-Qy-dlEkpUzjNZwS94gMDzI6o0H2amaKHMiMINLvZsU0f-kSGe_Cj7F1cfxV2L8zwLxHO5d5A4XyLj5-UWwkNAL0dxLLjQAEpK5qv57vIPGBy4K1HGnHOIrTH2cBZPJ1qhHKCaMGhCUTRJtryaPWuST3ReTXVYqD3IhRRcZMpXMXbXuLLEnsBewzOyI9dhp1ZMSC0MFwIHofRJSj9S-A7STZq_9S-EluN4runiig&t=AQJEavvdTtQUsvl-Vkk",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "2. Thiết kế website dự án BDS",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIy7i0MxSOTlsYounWZ6ZOmP37IvnujKMPfGt0T9Rs_OnA3XYB0OZejDZg9m9swnIYefGUpKixtt_x4PBitQXnburXQg3mTVQKYk9YirtgFd6AnzVu40CuuguNppXSQ8L7KFt30Fw2vyr3rjFhmm3vKbxhZentnS5ME6cOpIanou5MA_Y0GMRPksKDhfVbxG2EDG3emkRI7cLG2ZoPMPfXOs8Elv4ERoSFPpsvtY_dYxg&t=AQJITTS5NtChbV8inso",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Business Web 0307",
+    "name": "1. Thiết kế website BDS chuẩn SEO",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJvy9GhJEA-aqhzviNzVUyuZZMpdKikcuXFWNClcA5tRxef0W-mr6CL6FdYgDQRQkKh9PCrQAT3bHjHzuj39sZaGJOvX0Z6aX1kDMySgR1pVRCKi58CAW52r_aTmwXFgMOeGUqaQ6BuJlZyY6Kuif5PIGCiutiBGFZyIDGceANHSB2vOV1HK-Hs-uRLeoMLEPf4gOyIH5kLhGgLnMm7g_YiPi6OvPOhU6c06rgD3r06hA&t=AQIqxebMRSXFV9UnPzs",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Harasocial",
+    "name": "4. Tăng Lead tiềm năng",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKjL_9s38qiTWIEI2rdt7wIZye-KC_aTQ5GFjsVJLaHiLDZtpuhYtwZ2hwgcu6S-Q4D3mONtmVEN3sIUHnOfpyH0Z70AhuJZBrVF9W93cDc2XwAuiryOiHUDL_mstNTG4sUOswBhaeK2yirZ6QAaKuxJAqd6PFyLaJ5tL0l3UUgpMiSD1tpLs2WxI3w8aEB_lrMP2beXsYM09GsTLztfIbo73WahVlSjIaCRAvLigoOFw&t=AQLuUFzhDViAoxHNhSY",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Harasocial",
+    "name": "1. Bán hàng đa kênh",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIZoyJfdaiz7k-ePqN6HRm0rDTNwDFCrkRFfXxOME5XY2qXym3cl5y82c35CQ12kvei6FdyA4c-na1XLgKxyt9udvMoP0yfacz2JTjETsDLFErs6Ugk1XK7wZsXNgpOuj6gwA7XzIGSH2rUrlfdFC4JYIs_ERSIGLZnyc8EG45M6qLFG5GXqBJfJD0S20mRwlVvC0zeJir7MI3atFQPU278tTF6BgygeNC6SlYOmfUcwA&t=AQLhix0TZzFatUdfXkc",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Harasocial",
+    "name": "3. Tự động chăm sóc khách cũ",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQKagkpDoBdliPxlfVcDbg_Eycv0PkoqDmu1O5K5NNaT5P8pn0ylVBimfMEIQv8x5rSvVvuBJy7PDAO8uFaukRiGV-Hr__5gZpdJLeCqlZvgXsovCk1WF9c1FtuXiCm6B-TJza3O9zI0CPLWzPnoKcyzOxJOqS7ywbuQwviulKtOtqXWj0J0DiP3mYX8HCZZl3siEB8pLlSdweXTeq-pdSPAP43g1tf9dPOWmqQA9xvV8Q&t=AQK-ARQ6iPiEsRLxYis",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Harasocial",
+    "name": "2. Chăm sóc khách cũ",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJhr_I6Fuu8Rhii7YaRaz5dY6mkCVDn329ZCb_8REubHcd8CHpb0HgZ-6w5lBuFuKhYfhg3IHTHPFP0eZ93i7asp5POaLERI1n8zzwY68XdNq6xXffG0BRedQEX1FDtQrgPJjlRie2mPxt9NfzUhrSQ6s7XJm8eXsqMnlEyCofFFthCrIbdKXAFHVj9A6bjQWfy4jOoWR2XSVd-_LsV2BCvaz8Y4-7FKP262g4OexxLCw&t=AQLW460aMmf9WP2hQNA",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.1 Harasocial",
+    "name": "5. HRV đối tác Meta",
+    "cta": "",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQIXQSwu5MNzGOZwVGzcuNOY1Uqca_jdv8mwVeLOLuw8_enj45rYP_gvYo8kXQmKnOiJzlMATW_S08wNvqbNmO_-sc-dPjaR5RQ69d6vTuC1SKptjiSEl3luVmQgD8U1gN3tnlpRD7uvF_zN0VywU1SYcs7y3UMs8hFHY8W1Ce3dkoL5nr2Uc1iSIYGiW-eUNxo5SS0W6W3eO0_hqReasFT_Cz6Yay4pXNhF0geeTMXvrw&t=AQLu785jmOEuQ7Jndys",
+    "status": "OFF",
+    "account": "Haravan (chính)"
+  },
+  {
+    "campaign": "Path 1.3 Omnichanel 0807",
+    "name": "VDO-KB33. Quản lý đơn hàng đa kênh",
+    "cta": "MESSAGE_PAGE",
+    "body": "😵 ĐƠN NHIỀU NHƯNG QUẢN LÝ VẬN CHUYỂN RỐI TUNG?\n\nMỗi ngày phải:\n📱 Mở nhiều app vận chuyển\n📊 Nhập Excel thủ công\n🔎 Dò từng đơn khi khách hỏi trạng thái\n\nChỉ cần đơn tăng là bắt đầu:\n❌ Dễ nhập sai – sót COD\n❌ Không biết đơn nào thất bại\n❌ Không kiểm soát được tiền ship & công nợ\n❌ Mất thời gian mà vẫn dễ sai\n\n💡 Haravan giúp bạn quản lý vận chuyển & COD trong một màn hình duy nhất\n\n✔ Gom toàn bộ đơn từ mọi kênh về 1 hệ thống\n✔ Theo dõi trạng thái giao hàng, COD, phí ship real-time\n✔ Lọc nhanh đơn chưa thu COD hoặc giao thất bại\n✔ Hỗ trợ 15+ phương thức thanh toán và nhiều đơn vị vận chuyển\n\n📦 Đơn nhiều vẫn xử lý nhanh – rõ ràng – chính xác.\n💰 Quản lý COD minh bạch hơn, vận hành tự tin hơn.\n\n👉 Trải nghiệm Haravan ngay hôm nay để quản lý vận chuyển gọn – nhanh – hiệu quả hơn. 🚀",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQJl1pdKryz9T-_ECnCXzd2iOxpJ14UT8u6mV7riCYp2oiw0DcoTZ2dPGhETEEQ7pT2ND51BkFYOh_3Qlrh2TJ2xPT5vatOn1Sy75DhM6wz0F2FYn9qopDVeprxNOyjoRQn0hCECyOqz8QPCC40Yyoa5Nt2Sw1n15yuNGHTYVI9m77h4fWFipnroXypAcOTQLQ9hZzYoUQ3YF7zeHLygA5_T_bJZVrKG3KO-xMBoSCXp8g&t=AQJvYjp7Mfyj1NEjBwM",
+    "status": "ON",
+    "account": "Haravan Official"
+  },
+  {
+    "campaign": "Path 1.3 Omnichanel 0807",
+    "name": "VDO-KB28. Quản lý vận chuyển và thanh toán",
+    "cta": "MESSAGE_PAGE",
+    "body": "",
+    "preview": "https://business.facebook.com/ads/api/preview_iframe.php?d=AQLfR5OTcTn4Z1r0hSi8MneuUAYAhTSmS_PNX1CAwo2ZikxMY0pQMXdBxVacHZAKRccc09V30lb61VDvgWxZfWgQ50q5WHQT-ykICxbVXK0xENK8EH8bY5b6kHyolnumCFXmSK0D2lzl67mWq769iwzpiYkXxV_v5jPDA2h_EhSDg9z6PhAiJhvjhRrM01OBDdI_gP2A3Hc0eqqSWDWFBHQdKSQXX1w_ZcnMpnXl7OJCCQ&t=AQJw6XMPEFuXrTVLZjQ",
+    "status": "ON",
+    "account": "Haravan Official"
+  }
+];
+
+function esc(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function buildFilterOptions(){
+  const accSel = document.getElementById('accountFilter');
+  const accounts = [...new Set(ADS.map(a=>a.account))];
+  accounts.forEach(acc=>{
+    const o = document.createElement('option');
+    o.value = acc; o.textContent = acc;
+    accSel.appendChild(o);
+  });
+
+  const sel = document.getElementById('campaignFilter');
+  const camps = [...new Set(ADS.map(a=>a.campaign))];
+  camps.forEach(c=>{
+    const o = document.createElement('option');
+    o.value = c; o.textContent = c;
+    sel.appendChild(o);
+  });
+}
+
+function matches(ad, q, campaign, status, account){
+  if(account !== 'all' && ad.account !== account) return false;
+  if(campaign !== 'all' && ad.campaign !== campaign) return false;
+  if(status !== 'all' && ad.status !== status) return false;
+  if(!q) return true;
+  const hay = (ad.name + ' ' + ad.body).toLowerCase();
+  return hay.includes(q.toLowerCase());
+}
+
+function render(){
+  const q = document.getElementById('searchInput').value.trim();
+  const campaign = document.getElementById('campaignFilter').value;
+  const status = document.getElementById('statusFilter').value;
+  const account = document.getElementById('accountFilter').value;
+  const filtered = ADS.filter(a=>matches(a,q,campaign,status,account));
+
+  const groups = {};
+  filtered.forEach(a=>{
+    const key = a.account + ' || ' + a.campaign;
+    if(!groups[key]) groups[key] = { account: a.account, campaign: a.campaign, items: [] };
+    groups[key].items.push(a);
+  });
+
+  const container = document.getElementById('results');
+  container.innerHTML = '';
+
+  document.getElementById('resultCount').textContent = filtered.length + ' / ' + ADS.length + ' ads';
+
+  if(filtered.length === 0){
+    container.innerHTML = '<div class="no-results">Không tìm thấy ad nào khớp bộ lọc.</div>';
+    return;
+  }
+
+  Object.values(groups).forEach(group=>{
+    const items = group.items;
+    const onCount = items.filter(a=>a.status==='ON').length;
+    const offCount = items.length - onCount;
+    const section = document.createElement('section');
+    section.className = 'campaign-group';
+
+    const heading = document.createElement('div');
+    heading.className = 'campaign-heading';
+    heading.innerHTML = `<h2>${esc(group.account)} — ${esc(group.campaign)}</h2><span class="count">${items.length} ad</span>` +
+      (onCount ? `<span class="status-badge on">${onCount} ON</span>` : '') +
+      (offCount ? `<span class="status-badge off">${offCount} OFF</span>` : '');
+    section.appendChild(heading);
+
+    const grid = document.createElement('div');
+    grid.className = 'grid';
+
+    items.forEach((ad)=>{
+      const card = document.createElement('div');
+      card.className = 'card';
+      const hasBody = !!ad.body;
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="ad-name">${esc(ad.name)}</div>
+          <span class="status-badge ${ad.status==='ON'?'on':'off'}">${ad.status}</span>
+        </div>
+        ${ad.cta ? `<span class="cta-badge" style="align-self:flex-start">${esc(ad.cta)}</span>` : ''}
+        <div class="body-text ${hasBody ? '' : 'no-copy'}">${hasBody ? esc(ad.body) : '(Không có primary text — có thể là dynamic/catalog creative, xem preview để biết nội dung thật)'}</div>
+        ${hasBody ? '<div class="fade"></div><button class="expand-btn" data-action="expand">Xem thêm ▾</button>' : ''}
+        <div class="card-footer">
+          <a class="btn-preview" href="${ad.preview}" target="_blank" rel="noopener">Xem preview ↗</a>
+          <button class="btn-copy" data-action="copylink">Copy link</button>
+        </div>
+      `;
+      const bodyEl = card.querySelector('.body-text');
+      const expandBtn = card.querySelector('[data-action="expand"]');
+      if(expandBtn){
+        expandBtn.addEventListener('click', ()=>{
+          bodyEl.classList.toggle('expanded');
+          expandBtn.textContent = bodyEl.classList.contains('expanded') ? 'Thu gọn ▴' : 'Xem thêm ▾';
+        });
+      }
+      const copyBtn = card.querySelector('[data-action="copylink"]');
+      copyBtn.addEventListener('click', ()=>{
+        navigator.clipboard.writeText(ad.preview).then(()=>{
+          copyBtn.textContent = 'Đã copy ✓';
+          copyBtn.classList.add('copied');
+          setTimeout(()=>{ copyBtn.textContent='Copy link'; copyBtn.classList.remove('copied'); }, 1600);
+        });
+      });
+      grid.appendChild(card);
+    });
+
+    section.appendChild(grid);
+    container.appendChild(section);
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', render);
+document.getElementById('campaignFilter').addEventListener('change', render);
+document.getElementById('statusFilter').addEventListener('change', render);
+document.getElementById('accountFilter').addEventListener('change', render);
+
+buildFilterOptions();
+render();
+</script>
+</body>
+</html>
